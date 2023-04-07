@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<input type="text" id="inputName" placeholder="The student name ...">
+<button type="button" onclick="createStudents()">Create</button>
+<input type="text" id="searchName" placeholder="The student name ..." oninput="actionSearch()">
+
+
+<h1 id="validate"></h1>
+<table border="1" style="width: 100%">
+    <tr>
+        <th>STT</th>
+        <th>NAME</th>
+        <th>EDIT</th>
+        <th>DELETE</th>
+    </tr>
+    <tbody id="drawTable">
+
+    </tbody>
+</table>
+
+<script>
+    let studentList = ['a', 'b'];
+
+    function showList() {
+        let drawTable = '';
+        for (let i = 0; i < studentList.length; i++) {
+            drawTable += `<tr>
+        <td>${i + 1}</td>
+        <td>${studentList[i]}</td>
+        <td><button onclick="updateStudent(${i})"> Edit  </button></td>
+        <td><button onclick="deleteStudent(${i})" style="background-color: crimson"> Delete </button></td>
+      </tr>`
+        }
+        // console.log(drawTable)
+        document.getElementById(`drawTable`).innerHTML = drawTable;
+    }
+
+    showList()
+
+    function createStudents() {
+        let name = document.getElementById("inputName").value;
+        if (name.trim() === "") {
+            document.getElementById('validate').innerHTML = "<p style='color: orangered'>ten dang de trong </p>"
+        } else {
+            studentList.push(name);
+            showList()
+            document.getElementById('validate').innerHTML = "<p style='color: blue'>tao thanh cong </p>"
+
+        }
+        // console.log(name)
+    }
+
+    function updateStudent(index) {
+        console.log("goi ham update", index)
+        let editName = prompt("nhap vao ten de sua-->" + studentList[index]);
+        console.log("editName", editName)
+        if (editName === null) {
+            document.getElementById('validate').innerHTML = "<p style='color: orangered'>ten khong hop le</p>"
+
+        } else if (editName.trim() === "") {
+            console.log("editName--->")
+            document.getElementById('validate').innerHTML = "<p style='color: orangered'>ten dang de trong</p>"
+        } else if (editName === studentList[index]) {
+            document.getElementById('validate').innerHTML = "<p style='color: orangered'>ten nhap vao trung voi ten cu</p>"
+        } else {
+            studentList[index] = editName;
+            showList()
+            document.getElementById('validate').innerHTML = "<p style='color: blue'> sua thanh cong </p>"
+        }
+    }
+
+    function deleteStudent(index) {
+        console.log("goi ham xoa", index)
+        if (confirm("Ban co muon xoa hay khong")) {
+            studentList.splice(index, 1)
+            document.getElementById('validate').innerHTML = "<p style='color: blue'> xoa thanh cong </p>"
+            showList()
+        } else {
+            document.getElementById('validate').innerHTML = "<p style='color: blue'> ok </p>"
+        }
+    }
+
+    //
+    let listSearch = [];
+
+    function actionSearch() {
+        let search = document.getElementById("searchName").value;
+        if (search.trim() === "") {
+            showList()
+            return;
+        }
+        console.log(search);
+        listSearch = [];
+        for (let i = 0; i < studentList.length; i++) {
+            if (studentList[i].search(search) !== -1) {
+                listSearch.push(studentList[i])
+            }
+            // if (search.toLowerCase() === studentList[i].toLowerCase()){
+            //     listSearch.push(studentList[i])
+            // }
+        }
+        showListSearch()
+
+    }
+
+    function showListSearch() {
+        let drawTable = '';
+        for (let i = 0; i < listSearch.length; i++) {
+            drawTable += `<tr>
+        <td>${i + 1}</td>
+        <td>${listSearch[i]}</td>
+        <td><button onclick="updateStudent(${i})"> Edit  </button></td>
+        <td><button onclick="deleteStudent(${i})" style="background-color: crimson"> Delete </button></td>
+      </tr>`
+        }
+        // console.log(drawTable)
+        document.getElementById(`drawTable`).innerHTML = drawTable;
+    }
+
+
+</script>
+</body>
+</html>
